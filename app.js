@@ -619,6 +619,9 @@ document.addEventListener('DOMContentLoaded', () => {
         link.download = `${prefix}_${dateStr}_${timeStr}.jpg`;
         link.href = dataURL;
         link.click();
+
+        // Web版限定: 保存成功後にPWAインストール促進トーストを表示
+        showPwaToast();
     }
 
     // フィルターの切り替え処理
@@ -1078,4 +1081,60 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ファイルアップローダー
     fileInput.addEventListener('change', handleImageUpload);
+
+    // === 8. Web PWA & Accordion Control ===
+
+    // Capacitor環境時にbodyクラスを追加（Web限定コンテンツの非表示用）
+    if (isCapacitor) {
+        document.body.classList.add('is-capacitor');
+    }
+
+    // アコーディオン（紹介・使い方パネル）開閉
+    const accordionBtn = document.getElementById('accordion-toggle-btn');
+    const accordionContent = document.getElementById('accordion-content-panel');
+    const accordionParent = document.querySelector('.intro-accordion');
+
+    if (accordionBtn && accordionContent) {
+        accordionBtn.addEventListener('click', () => {
+            const isOpen = accordionParent.classList.toggle('open');
+            if (isOpen) {
+                accordionContent.style.maxHeight = accordionContent.scrollHeight + "px";
+            } else {
+                accordionContent.style.maxHeight = "0px";
+            }
+        });
+    }
+
+    // PWAインストール案内トースト制御
+    const pwaToast = document.getElementById('pwa-toast');
+    const pwaToastCloseBtn = document.getElementById('pwa-toast-close-btn');
+
+    if (pwaToastCloseBtn) {
+        pwaToastCloseBtn.addEventListener('click', () => {
+            if (pwaToast) {
+                pwaToast.classList.remove('show');
+                // 一度閉じたらセッション中は再表示しない
+                sessionStorage.setItem('pwa_toast_dismissed', 'true');
+            }
+        });
+    }
+
+    function showPwaToast() {
+        const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+        const isDismissed = sessionStorage.getItem('pwa_toast_dismissed') === 'true';
+
+        // アプリ版、すでにPWA、または閉じ済みの場合は何もしない
+        if (isCapacitor || isStandalone || isDismissed) {
+            return;
+        }
+
+        setTimeout(() => {
+            if (pwaToast) {
+                pwaToast.style.display = 'block';
+                // リフロー強制
+                pwaToast.offsetHeight;
+                pwaToast.classList.add('show');
+            }
+        }, 1500);
+    }
 });

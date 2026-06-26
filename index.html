@@ -308,6 +308,61 @@
         </div>
     </div>
 
+    <!-- Web版限定セクション (アプリ起動時はJSで非表示または削除されます) -->
+    <div class="web-only-container">
+        <!-- 「平成レトロカメラとは？」アコーディオン -->
+        <div class="intro-accordion">
+            <button class="accordion-header" id="accordion-toggle-btn">
+                💡 平成レトロカメラとは？（使い方と開発の想い） <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content" id="accordion-content-panel">
+                <div class="accordion-inner">
+                    <h3>📸 あの頃の空気感を、もう一度</h3>
+                    <p>『平成レトロカメラ』は、2000年代初頭に私たちが使っていた「ガラケー（携帯電話）」のカメラ画質を忠実に再現するカメラアプリです。</p>
+                    
+                    <h3>✨ ガラケー画質（ローファイ）の魅力</h3>
+                    <p>現在のスマホカメラは非常に高画質ですが、あえて色数を減らし、粗いドット（ピクセル）に変換することで、独特のノスタルジーやY2K（イヤー・ツー・ケー）トレンドのレトロポップな世界観を作り出すことができます。普通の写真が一瞬でエモい1枚に生まれ変わります。</p>
+                    
+                    <h3>⚙️ 詳しい使い方</h3>
+                    <ul>
+                        <li><strong>カメラ起動:</strong> 液晶画面の「📷 ｶﾒﾗ起動」を押すと、カメラのリアルタイム映像が映ります。</li>
+                        <li><strong>画像選択:</strong> 「📁 画像選択」またはテンキーの「7」キーで、スマホ内にある写真を読み込んで加工できます。</li>
+                        <li><strong>ドットの粗さ・色数調整:</strong> テンキーの「9」または画面右下の「⛶」ボタンを押して<strong>「全画面編集モード」</strong>を開くと、プレビューを大きく見ながらドットの粗さや色の階調を細かく調整できます。</li>
+                        <li><strong>フィルター選択:</strong> テンキーの「1」〜「5」で「標準ガラケー」「白黒液晶」「緑液晶（レトロゲーム風）」「セピア」「Y2Kビビット（サイバー）」のフィルターを瞬時に切り替えられます。</li>
+                        <li><strong>保存:</strong> 「保存」または「写真を保存」ボタンを押すことで、加工した画像をダウンロードできます。</li>
+                    </ul>
+
+                    <h3>🔒 安心の完全ローカル処理</h3>
+                    <p>本アプリは、写真の読み込みやカメラ映像のドット絵加工などを<strong>すべてお客様の端末内（ブラウザ内）だけで処理</strong>しています。画像データが外部のサーバーに送信されたり保存されたりすることは一切ありませんので、安心してご利用ください。</p>
+                    
+                    <p class="dev-note">※本アプリは、平成レトロの懐かしい雰囲気を楽しむためのエンターテインメントアプリです。</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 忍者AdMax 広告枠コンテナ -->
+        <div class="web-ad-area">
+            <div class="web-ad-label">広告</div>
+            <div class="admax-wrapper">
+                <!-- admax -->
+                <script src="https://adm.shinobi.jp/s/d70eb879d18234e67de50d76561f75eb"></script>
+                <!-- admax -->
+            </div>
+        </div>
+    </div>
+
+    <!-- PWAインストール案内トースト（初回保存後に表示） -->
+    <div class="pwa-toast-container" id="pwa-toast" style="display: none;">
+        <div class="pwa-toast-content">
+            <span class="pwa-toast-emoji">💎</span>
+            <div class="pwa-toast-text">
+                <strong>ホーム画面に追加しませんか？</strong>
+                <span>次からアプリのようにワンタップで一瞬で起動できます！</span>
+            </div>
+            <button class="pwa-toast-close" id="pwa-toast-close-btn" title="閉じる">✕</button>
+        </div>
+    </div>
+
     <script src="app.js?v=6"></script>
     
     <!-- サービスワーカー (PWA) の登録 -->

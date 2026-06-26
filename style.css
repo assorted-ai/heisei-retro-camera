@@ -1249,3 +1249,204 @@ body.premium-active #btn-buy-premium {
     transform: translateY(2px);
     box-shadow: none;
 }
+
+/* ==========================================================================
+   🌐 Web版限定セクション (アコーディオン・広告・PWA案内)
+   ========================================================================== */
+
+/* アプリ版（Capacitor起動）のときはWeb用コンテナを完全に非表示 */
+body.is-capacitor .web-only-container,
+body.is-capacitor .pwa-toast-container {
+    display: none !important;
+}
+
+.web-only-container {
+    width: 100%;
+    max-width: 480px;
+    margin: 20px auto 40px auto;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+/* アコーディオン・紹介セクション */
+.intro-accordion {
+    background: rgba(255, 255, 255, 0.9);
+    border: 3px solid var(--phone-color);
+    border-radius: 16px;
+    box-shadow: 4px 4px 0px rgba(255, 105, 180, 0.2);
+    overflow: hidden;
+    margin-bottom: 25px;
+    font-family: 'DotGothic16', sans-serif;
+}
+
+.accordion-header {
+    width: 100%;
+    background: linear-gradient(135deg, #ff69b4 0%, #ff1493 100%);
+    color: #fff;
+    border: none;
+    padding: 12px 16px;
+    font-size: 14px;
+    font-family: inherit;
+    font-weight: bold;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background 0.2s;
+    outline: none;
+}
+
+.accordion-header:hover {
+    background: linear-gradient(135deg, #ff85c2 0%, #ff33a3 100%);
+}
+
+.accordion-icon {
+    font-size: 10px;
+    transition: transform 0.3s ease;
+}
+
+.intro-accordion.open .accordion-icon {
+    transform: rotate(180deg);
+}
+
+.accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease-out;
+    background-color: #fff;
+}
+
+.accordion-inner {
+    padding: 16px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.accordion-inner h3 {
+    font-size: 14px;
+    color: var(--phone-accent);
+    margin-top: 15px;
+    margin-bottom: 6px;
+    border-left: 4px solid var(--phone-color);
+    padding-left: 8px;
+}
+
+.accordion-inner h3:first-child {
+    margin-top: 0;
+}
+
+.accordion-inner p {
+    margin-bottom: 10px;
+}
+
+.accordion-inner ul {
+    margin-left: 18px;
+    margin-bottom: 12px;
+}
+
+.accordion-inner li {
+    margin-bottom: 6px;
+}
+
+.accordion-inner .dev-note {
+    font-size: 11px;
+    color: #777;
+    margin-top: 15px;
+    text-align: right;
+    border-top: 1px dotted #ccc;
+    padding-top: 8px;
+}
+
+/* 広告表示エリア */
+.web-ad-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.web-ad-label {
+    font-family: 'DotGothic16', sans-serif;
+    font-size: 10px;
+    color: #999;
+    margin-bottom: 4px;
+    letter-spacing: 2px;
+}
+
+.admax-wrapper {
+    min-height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* PWAインストール案内トースト */
+.pwa-toast-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    width: 90%;
+    max-width: 440px;
+    z-index: 9999;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.pwa-toast-container.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.pwa-toast-content {
+    background: rgba(31, 41, 55, 0.95);
+    backdrop-filter: blur(8px);
+    border: 2px solid #ff69b4;
+    border-radius: 16px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+    color: #fff;
+}
+
+.pwa-toast-emoji {
+    font-size: 24px;
+    margin-right: 12px;
+}
+
+.pwa-toast-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    font-family: 'DotGothic16', sans-serif;
+}
+
+.pwa-toast-text strong {
+    font-size: 13px;
+    color: #ff69b4;
+    margin-bottom: 2px;
+}
+
+.pwa-toast-text span {
+    font-size: 11px;
+    color: #d1d5db;
+    line-height: 1.4;
+}
+
+.pwa-toast-close {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 4px;
+    margin-left: 8px;
+    transition: color 0.2s;
+}
+
+.pwa-toast-close:hover {
+    color: #fff;
+}
