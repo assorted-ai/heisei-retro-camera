@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>平成レトロカメラ | ガラケー画質・ドット絵加工Webアプリ</title>
+    
+    <!-- SEO 対策メタタグ -->
+    <meta name="description" content="「あの頃」のガラケー画質にワンタップ加工！平成レトロなエモいドット絵風写真が撮れる、Y2Kエフェクト特化型カメラアプリ。">
+    <meta name="keywords" content="平成レトロカメラ,ガラケー画質,ドット絵加工,Y2Kエフェクト,レトロポップ,カメラアプリ,無料,PWA">
+    
+    <!-- OGP (SNSシェア用メタタグ) -->
+    <meta property="og:title" content="平成レトロカメラ | ガラケー画質ドット絵加工アプリ">
+    <meta property="og:description" content="撮影した写真をガラケー風 of 低解像度・ガサガサ画質にワンタップ加工！">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="icon-512.png">
+    
+    <!-- PWA対応メタタグ ＆ マニフェスト -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ff69b4">
+    
+    <!-- iOS用PWA対応 -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="平成ﾚﾄﾛｶﾒﾗ">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <link rel="stylesheet" href="style.css">
+    <!-- レトロなドットフォントをインポート -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=VT323&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app-wrapper">
+        <header class="app-header">
+            <h1 class="logo-text">★ ｹｰﾀｲ写ﾒ CLUB ★</h1>
+            <p class="sub-text">あの頃の画質に戻れる魔法のカメラアプリ</p>
+        </header>
+
+        <main class="main-content">
+            <!-- ガラケー本体のUI -->
+            <div class="phone-case">
+                <!-- 側面ボタン（ボリューム/ズーム/ライトキー） -->
+                <div class="side-keys">
+                    <button class="side-key-btn" id="btn-side-zoom-in" title="ズームイン">＋</button>
+                    <button class="side-key-btn" id="btn-side-zoom-out" title="ズームアウト">－</button>
+                    <button class="side-key-btn" id="btn-side-light" title="ライトON/OFF">⚡</button>
+                </div>
+
+                <!-- 上部パーツ（ディスプレイ側） -->
+                <div class="phone-upper">
+                    <div class="speaker"></div>
+                    <div class="screen-bezel">
+                        <div class="screen-inner">
+                            <!-- ステータスバー（電波、時間、電池） -->
+                            <div class="status-bar">
+                                <div class="signal">📶<span class="sig-bars">▰▰▰</span></div>
+                                <div class="status-indicators">
+                                    <span class="status-item" id="status-zoom">[x1.0]</span>
+                                    <span class="status-item" id="status-flash">⚡[切]</span>
+                                </div>
+                                <div class="quality-mode" id="status-quality">[待受]</div>
+                                <div class="clock" id="status-clock">12:00</div>
+                                <div class="battery">🔋100%</div>
+                            </div>
+
+                            <!-- メインビュー（液晶） -->
+                            <div class="screen-display">
+                                <!-- カメラプレビュー（非表示にしてCanvasにドット絵化して描画） -->
+                                <video id="camera-video" autoplay playsinline muted style="display: none;"></video>
+                                
+                                <!-- 液晶の中身：ドット絵変換を表示するCanvas -->
+                                <canvas id="display-canvas"></canvas>
+
+                                <!-- 液晶の上に重なるレトロフィルター（走査線やグリッド） -->
+                                <div class="scanlines"></div>
+                                <div class="lcd-grid"></div>
+
+                                <!-- プレースホルダー（初期状態） -->
+                                <div class="screen-placeholder" id="placeholder">
+                                    <div class="placeholder-icon">📸</div>
+                                    <div class="placeholder-title">ｶﾒﾗを起動するか<br>画像を読み込んでね！</div>
+                                    <div class="placeholder-actions">
+                                        <button class="screen-btn" id="screen-btn-upload">📁 画像選択</button>
+                                        <button class="screen-btn" id="screen-btn-camera">📷 ｶﾒﾗ起動</button>
+                                    </div>
+                                    <button class="screen-premium-btn" id="screen-btn-premium">💎 広告非表示(￥300)</button>
+                                </div>
+
+                                <!-- 全画面編集モード起動ボタン -->
+                                <button class="screen-expand-btn" id="screen-btn-expand" title="全画面編集モード">⛶</button>
+
+                                <!-- 撮影時のフラッシュエフェクト -->
+                                <div class="flash-overlay" id="flash-effect"></div>
+                            </div>
+
+                            <!-- ガラケー画面下のガイド表示 -->
+                            <div class="screen-guide">
+                                <div class="guide-item" id="guide-left">ｶﾒﾗ切替</div>
+                                <div class="guide-item" id="guide-center">撮影/変換</div>
+                                <div class="guide-item" id="guide-right">保存</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ヒンジ部分（折りたたみ蝶番） -->
+                <div class="phone-hinge">
+                    <div class="hinge-center"></div>
+                </div>
+
+                <!-- 下部パーツ（キーパッド側） -->
+                <div class="phone-lower">
+                    <div class="keypad-container">
+                        <!-- メニューキー・十字キー -->
+                        <div class="navigation-keys">
+                            <button class="key-btn side-btn" id="btn-upload" title="カメラを切り替える">
+                                <span class="key-label">ｶﾒﾗ切替</span>
+                            </button>
+                            
+                            <div class="d-pad">
+                                <button class="d-btn d-up" id="btn-prev-filter" title="前のフィルター">▲</button>
+                                <button class="d-btn d-left" id="btn-dec-pixel" title="ドットを粗く">◀</button>
+                                <button class="d-btn d-ok" id="btn-shutter" title="決定 / 撮影">決定</button>
+                                <button class="d-btn d-right" id="btn-inc-pixel" title="ドットを細かく">▶</button>
+                                <button class="d-btn d-down" id="btn-next-filter" title="次のフィルター">▼</button>
+                            </div>
+
+                            <button class="key-btn side-btn" id="btn-save" title="写真を保存">
+                                <span class="key-label">保存</span>
+                            </button>
+                        </div>
+
+                        <!-- テンキー -->
+                        <div class="num-keys">
+                            <button class="key-btn num-btn" data-key="1"><span class="num">1</span><span class="letters">標準ガラケー</span></button>
+                            <button class="key-btn num-btn" data-key="2"><span class="num">2</span><span class="letters">白黒液晶</span></button>
+                            <button class="key-btn num-btn" data-key="3"><span class="num">3</span><span class="letters">緑液晶</span></button>
+                            <button class="key-btn num-btn" data-key="4"><span class="num">4</span><span class="letters">セピア</span></button>
+                            <button class="key-btn num-btn" data-key="5"><span class="num">5</span><span class="letters">Y2Kビビット</span></button>
+                            <button class="key-btn num-btn" data-key="6"><span class="num">6</span><span class="letters">空き</span></button>
+                            <button class="key-btn num-btn" data-key="7"><span class="num">7</span><span class="letters">画像選択</span></button>
+                            <button class="key-btn num-btn" data-key="8"><span class="num">8</span><span class="letters">空き</span></button>
+                            <button class="key-btn num-btn" data-key="9"><span class="num">9</span><span class="letters">全画面編集</span></button>
+                            <button class="key-btn num-btn" data-key="*"><span class="num">＊</span><span class="letters">画質切替</span></button>
+                            <button class="key-btn num-btn" data-key="0"><span class="num">0</span><span class="letters">画面表示</span></button>
+                            <button class="key-btn num-btn" data-key="#"><span class="num">＃</span><span class="letters">リセット</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 操作・状態インジケータパネル（画面外） -->
+            <div class="control-panel">
+                <div class="panel-section">
+                    <h3>📁 ﾌｨﾙﾀｰ設定</h3>
+                    <div class="filter-indicator" id="filter-name">フィルター: 標準ガラケー</div>
+                    <div class="filter-indicator" id="quality-indicator" style="background-color: #3b2a4a; color: #ff99ff; border-color: #2b1535; margin-top: -6px;">保存画質: 待ち受けサイズ (640px)</div>
+                    <div class="filter-controls">
+                        <label>ドットの粗さ: <span id="pixel-size-value">8</span>px</label>
+                        <input type="range" id="pixel-slider" min="1" max="24" step="1" value="8">
+                    </div>
+                    <div class="filter-controls">
+                        <label>色数制限: <span id="color-level-value">8</span>階調</label>
+                        <input type="range" id="color-slider" min="2" max="16" step="1" value="8">
+                    </div>
+                    <div class="filter-list">
+                        <button class="filter-preset-btn active" data-preset="normal">標準ガラケー</button>
+                        <button class="filter-preset-btn" data-preset="mono">白黒液晶</button>
+                        <button class="filter-preset-btn" data-preset="gameboy">レトロ液晶(緑)</button>
+                        <button class="filter-preset-btn" data-preset="sepia">セピア画質</button>
+                        <button class="filter-preset-btn" data-preset="cyber">Y2Kビビット</button>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h3>📷 ｶﾒﾗ設定</h3>
+                    <div class="filter-controls">
+                        <label>デジタルズーム: <span id="zoom-value">1.0</span>x</label>
+                        <input type="range" id="zoom-slider" min="1.0" max="3.0" step="0.1" value="1.0">
+                    </div>
+                    <div class="filter-list" style="grid-template-columns: 1fr 1fr;">
+                        <button class="filter-preset-btn" id="btn-toggle-camera">イン/アウト切替</button>
+                        <button class="filter-preset-btn" id="btn-toggle-light">ライト (⚡)</button>
+                    </div>
+                </div>
+
+                <div class="panel-section instructions">
+                    <h3>💡 使い方</h3>
+                    <ul>
+                        <li><strong>カメラ起動:</strong> ケータイ画面の「ｶﾒﾗ起動」か「決定」キーを押してね</li>
+                        <li><strong>画像読み込み:</strong> ケータイ画面の「画像選択」ボタン、またはテンキーの「7」キーで手持ちの写真をドット絵にできます</li>
+                        <li><strong>ドットの粗さ変更:</strong> スライダーか十字キーの左右◀▶で調整可能！</li>
+                        <li><strong>フィルター切替:</strong> プリセットボタンか十字キーの上下▲▼で切り替え</li>
+                        <li><strong>画面表示切替:</strong> テンキーの「0」キーで、全画面表示と全体表示を切り替えられます</li>
+                        <li><strong>保存画質切り替え:</strong> テンキーの「＊」キーで、待ち受けサイズと写真の元サイズを切り替えられます</li>
+                        <li><strong>写真を保存:</strong> 「保存」キーを押すと、加工された写真がダウンロードされます</li>
+                    </ul>
+                </div>
+
+                <div class="panel-section" id="premium-panel-section">
+                    <h3>💎 ﾌﾟﾚﾐｱﾑ機能</h3>
+                    <div class="filter-indicator" id="premium-status" style="background-color: #1b351e; color: #66bb6a; border-color: #0c1a0e;">ステータス: 無料版 (広告あり)</div>
+                    <button class="filter-preset-btn" id="btn-buy-premium" style="width: 100%; font-weight: bold; background: linear-gradient(135deg, #ffd54f 0%, #ffb300 100%); color: #333; border-color: #ff9100;">💎 広告を消す (￥300)</button>
+                </div>
+            </div>
+        </main>
+
+        <!-- 画像ファイル選択用の隠しinput -->
+        <input type="file" id="image-file-input" accept="image/*" style="display: none;">
+
+        <!-- ダミーのバナー広告（プレミアム時に非表示） -->
+        <div class="ad-banner-wrapper" id="ad-banner">
+            <div class="ad-label">▼ ｽﾎﾟﾝｻｰﾄﾞﾘﾝｸ</div>
+            <div class="ad-content">
+                <a href="#" class="ad-link" onclick="alert('ダミーの広告ページへ移動します（実際にはどこにも遷移しません）'); return false;">
+                    <span class="ad-flash-text">★超画期的新メロディ★</span>
+                    <span class="ad-main-text">着うた・デコメ取り放題♪月額300円!!</span>
+                    <span class="ad-action-text">今すぐClick!➔</span>
+                </a>
+            </div>
+        </div>
+
+        <footer class="app-footer">
+            <p>&copy; 2000-2026 HEISEI RETRO CAMERA - Y2K PROJECT</p>
+        </footer>
+    </div>
+
+    <!-- 💎 プレミアム購入ダイアログ（モーダル） -->
+    <div class="modal-overlay" id="premium-modal">
+        <div class="modal-box">
+            <div class="modal-header">★ 決済シミュレーター ★</div>
+            <div class="modal-body">
+                <div class="modal-icon">💎</div>
+                <h4>プレミアム版へアップグレード</h4>
+                <p>￥300 で広告を完全に非表示にしますか？</p>
+                <p class="modal-notice">※これはシミュレーションです。実際の決済は発生しません。</p>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn confirm-btn" id="modal-buy-confirm">購入する</button>
+                <button class="modal-btn cancel-btn" id="modal-buy-cancel">キャンセル</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📺 ダミー全画面インタースティシャル広告モーダル -->
+    <div class="modal-overlay" id="ad-interstitial-modal">
+        <div class="modal-box ad-modal-box">
+            <div class="modal-header">▼ SPONSORED LINK</div>
+            <div class="modal-body">
+                <div class="ad-countdown" id="ad-countdown-text">広告を読み込んでいます… (あと 3 秒)</div>
+                <!-- レトロでギラギラした全画面広告のダミー -->
+                <div class="ad-interstitial-content">
+                    <div class="ad-game-banner">
+                        <div class="ad-game-title">⚔️ 平成大戦記 ⚔️</div>
+                        <div class="ad-game-desc">懐かしの超大作RPGがモバイルで復活！</div>
+                        <div class="ad-game-chars">👾🐉🧙‍♂️</div>
+                        <div class="ad-game-action">【今すぐ無料ダウンロード】</div>
+                    </div>
+                </div>
+                <p class="modal-notice">※広告非表示（プレミアム版）にするとこの画面は出なくなります。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 📱 全画面編集モード（オーバーレイ） -->
+    <div class="fullscreen-editor-overlay" id="fullscreen-editor">
+        <!-- 上部ヘッダー（クローズボタン） -->
+        <div class="editor-header">
+            <span class="editor-title">★ ﾚﾄﾛ編集ﾓｰﾄﾞ ★</span>
+            <button class="editor-close-btn" id="editor-close-btn">✕ 閉じる</button>
+        </div>
+        
+        <!-- キャンバス表示エリア -->
+        <div class="editor-canvas-container">
+            <canvas id="editor-canvas"></canvas>
+            <div class="editor-scanlines"></div>
+        </div>
+        
+        <!-- 下部コントロールパネル -->
+        <div class="editor-controls-panel">
+            <div class="editor-control-group">
+                <label>ドットの粗さ: <span id="editor-pixel-size-value">8</span>px</label>
+                <input type="range" id="editor-pixel-slider" min="1" max="24" step="1" value="8">
+            </div>
+            <div class="editor-control-group">
+                <label>色数制限: <span id="editor-color-level-value">8</span>階調</label>
+                <input type="range" id="editor-color-slider" min="2" max="16" step="1" value="8">
+            </div>
+            <div class="editor-control-group" id="editor-zoom-group">
+                <label>デジタルズーム: <span id="editor-zoom-value">1.0</span>x</label>
+                <input type="range" id="editor-zoom-slider" min="1.0" max="3.0" step="0.1" value="1.0">
+            </div>
+            
+            <div class="editor-presets-row">
+                <button class="editor-preset-btn active" data-preset="normal">標準</button>
+                <button class="editor-preset-btn" data-preset="mono">白黒</button>
+                <button class="editor-preset-btn" data-preset="gameboy">緑液晶</button>
+                <button class="editor-preset-btn" data-preset="sepia">セピア</button>
+                <button class="editor-preset-btn" data-preset="cyber">Y2Kビビット</button>
+            </div>
+            
+            <div class="editor-actions-row">
+                <button class="editor-quality-btn" id="editor-btn-quality">📷 画質: 待受サイズ (640px)</button>
+                <button class="editor-action-btn" id="editor-btn-save">💾 写真を保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js?v=6"></script>
+    
+    <!-- サービスワーカー (PWA) の登録 -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((reg) => console.log('Service Worker 登録成功！', reg.scope))
+                    .catch((err) => console.error('Service Worker 登録失敗：', err));
+            });
+        }
+    </script>
+</body>
+</html>

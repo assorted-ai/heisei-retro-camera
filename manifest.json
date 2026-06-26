@@ -1,0 +1,22 @@
+{
+  "short_name": "平成ﾚﾄﾛｶﾒﾗ",
+  "name": "平成レトロカメラ - ガラケー画質ドット絵加工",
+  "description": "撮影した写真やお手持ちの画像を、2000年代初頭のガラケー（携帯電話）で撮ったような低解像度・ガサガサのドット絵風画質にワンタップで加工できるカメラアプリです。",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#1f2937",
+  "theme_color": "#ff69b4",
+  "display": "standalone",
+  "orientation": "portrait"
+}
