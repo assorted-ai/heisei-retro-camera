@@ -1385,9 +1385,9 @@ body.is-capacitor .pwa-toast-container {
 /* PWAインストール案内トースト */
 .pwa-toast-container {
     position: fixed;
-    bottom: 20px;
+    top: 20px;
     left: 50%;
-    transform: translateX(-50%) translateY(100px);
+    transform: translateX(-50%) translateY(-120px);
     width: 90%;
     max-width: 440px;
     z-index: 9999;
@@ -1449,4 +1449,25 @@ body.is-capacitor .pwa-toast-container {
 
 .pwa-toast-close:hover {
     color: #fff;
+}
+
+/* PC用・スマホ用広告の出し分け（レスポンシブ） */
+@media (min-width: 768px) {
+    /* PC表示のとき: スマホ用を非表示、PC用を表示 */
+    .ad-mobile-only {
+        display: none !important;
+    }
+    .ad-desktop-only {
+        display: flex !important;
+    }
+}
+
+@media (max-width: 767px) {
+    /* スマホ表示のとき: PC用を非表示、スマホ用を表示 */
+    .ad-mobile-only {
+        display: flex !important;
+    }
+    .ad-desktop-only {
+        display: none !important;
+    }
 }
