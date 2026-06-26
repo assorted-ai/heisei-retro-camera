@@ -672,8 +672,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // === 全画面編集モードの制御 ＆ 双方向同期 ===
     function toggleFullscreenEditor() {
         isFullscreenEditorActive = !isFullscreenEditorActive;
+        const webOnlyContainer = document.querySelector('.web-only-container');
+
         if (isFullscreenEditorActive) {
             fullscreenEditor.classList.add('active');
+            
+            // Web用広告・アコーディオンを非表示にする
+            if (webOnlyContainer) {
+                webOnlyContainer.style.display = 'none';
+            }
             
             // 各種スライダーの値を同期
             editorPixelSlider.value = pixelSize;
@@ -707,6 +714,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
             fullscreenEditor.classList.remove('active');
+            
+            // Web用広告・アコーディオンを再表示する
+            if (webOnlyContainer) {
+                webOnlyContainer.style.display = 'block';
+            }
             
             // 通常画面に戻る際はバナー広告を再表示する（プレミアム版でなければ）
             if (!isPremium) {
