@@ -1046,7 +1046,7 @@ body.premium-active #btn-buy-premium {
     background: rgba(12, 17, 24, 0.95);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    z-index: 900;
+    z-index: 99999;
     display: none; /* JS toggles 'flex' */
     flex-direction: column;
     color: #fff;
@@ -1390,7 +1390,7 @@ body.is-capacitor .pwa-toast-container {
     transform: translateX(-50%) translateY(-120px);
     width: 90%;
     max-width: 440px;
-    z-index: 9999;
+    z-index: 100000;
     opacity: 0;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -1472,10 +1472,15 @@ body.is-capacitor .pwa-toast-container {
     }
 }
 
-/* 全画面編集モード時の広告・外部要素の強制非表示 */
+/* 全画面編集モード時の広告・外部要素の強制非表示とタップイベント透過 */
 body.editor-active iframe,
 body.editor-active [id*="admax"],
 body.editor-active [class*="admax"],
-body.editor-active .web-only-container {
+body.editor-active .web-only-container,
+body.editor-active .web-ad-area,
+body.editor-active .admax-wrapper {
     display: none !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+    opacity: 0 !important;
 }
