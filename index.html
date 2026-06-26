@@ -25,7 +25,7 @@
     <meta name="apple-mobile-web-app-title" content="平成ﾚﾄﾛｶﾒﾗ">
     <link rel="apple-touch-icon" href="icon-192.png">
 
-    <link rel="stylesheet" href="style.css?v=2">
+    <link rel="stylesheet" href="style.css?v=3">
     <!-- レトロなドットフォントをインポート -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -372,15 +372,44 @@
         </div>
     </div>
 
-    <script src="app.js?v=7"></script>
+    <script src="app.js?v=8"></script>
     
-    <!-- サービスワーカー (PWA) の登録 -->
+    <!-- サービスワーカー (PWA) の登録と自動更新スクリプト -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
-                    .then((reg) => console.log('Service Worker 登録成功！', reg.scope))
+                    .then((reg) => {
+                        console.log('Service Worker 登録成功！', reg.scope);
+                        
+                        // 更新（新しいService Worker）の監視
+                        reg.onupdatefound = () => {
+                            const installingWorker = reg.installing;
+                            if (installingWorker) {
+                                installingWorker.onstatechange = () => {
+                                    if (installingWorker.state === 'installed') {
+                                        if (navigator.serviceWorker.controller) {
+                                            console.log('新しいバージョンが検出されました。強制リロードします。');
+                                            // 新しいService Workerが待機状態になったら自動リロードを期待
+                                        } else {
+                                            console.log('コンテンツがキャッシュされました。オフラインで利用可能です。');
+                                        }
+                                    }
+                                };
+                            }
+                        };
+                    })
                     .catch((err) => console.error('Service Worker 登録失敗：', err));
+            });
+
+            // 新しいService Workerが古いものを引き継いだ（コントローラーが変わった）時にリロードを実行
+            let refreshing = false;
+            navigator.serviceWorker.addEventListener('controllerchange', () => {
+                if (!refreshing) {
+                    refreshing = true;
+                    console.log('Service Worker controller が変更されました。ページをリロードします。');
+                    window.location.reload();
+                }
             });
         }
     </script>

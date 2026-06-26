@@ -676,6 +676,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isFullscreenEditorActive) {
             fullscreenEditor.classList.add('active');
+            document.body.classList.add('editor-active');
             
             // Web用広告・アコーディオンを非表示にする
             if (webOnlyContainer) {
@@ -714,6 +715,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else {
             fullscreenEditor.classList.remove('active');
+            document.body.classList.remove('editor-active');
             
             // Web用広告・アコーディオンを再表示する
             if (webOnlyContainer) {
