@@ -678,29 +678,10 @@ document.addEventListener('DOMContentLoaded', () => {
             fullscreenEditor.classList.add('active');
             document.body.classList.add('editor-active');
             
-            // 背景スクロールを完全にロックして、裏のページが動くのを防ぐ
-            document.body.style.overflow = 'hidden';
-            document.body.style.height = '100%';
-            document.documentElement.style.overflow = 'hidden';
-            
             // Web用広告・アコーディオンを非表示にする
             if (webOnlyContainer) {
                 webOnlyContainer.style.display = 'none';
             }
-            
-            // 【重要】DOM内のすべてのiframeおよびadmax関連要素をJSで直接強制非表示にする
-            const adElements = document.querySelectorAll('iframe, [id*="admax"], [class*="admax"]');
-            adElements.forEach(el => {
-                // 元のスタイルをデータ属性に退避
-                el.dataset.originalDisplay = el.style.display;
-                el.dataset.originalPointerEvents = el.style.pointerEvents;
-                el.dataset.originalVisibility = el.style.visibility;
-                
-                // インラインスタイルで display: none と pointer-events: none を強制
-                el.style.setProperty('display', 'none', 'important');
-                el.style.setProperty('pointer-events', 'none', 'important');
-                el.style.setProperty('visibility', 'hidden', 'important');
-            });
             
             // 各種スライダーの値を同期
             editorPixelSlider.value = pixelSize;
@@ -736,23 +717,10 @@ document.addEventListener('DOMContentLoaded', () => {
             fullscreenEditor.classList.remove('active');
             document.body.classList.remove('editor-active');
             
-            // 背景スクロールロックを解除
-            document.body.style.overflow = '';
-            document.body.style.height = '';
-            document.documentElement.style.overflow = '';
-            
             // Web用広告・アコーディオンを再表示する
             if (webOnlyContainer) {
                 webOnlyContainer.style.display = 'block';
             }
-            
-            // 広告要素のスタイルを復元する
-            const adElements = document.querySelectorAll('iframe, [id*="admax"], [class*="admax"]');
-            adElements.forEach(el => {
-                el.style.display = el.dataset.originalDisplay || '';
-                el.style.pointerEvents = el.dataset.originalPointerEvents || '';
-                el.style.visibility = el.dataset.originalVisibility || '';
-            });
             
             // 通常画面に戻る際はバナー広告を再表示する（プレミアム版でなければ）
             if (!isPremium) {

@@ -1472,15 +1472,10 @@ body.is-capacitor .pwa-toast-container {
     }
 }
 
-/* 全画面編集モード時の広告・外部要素の強制非表示とタップイベント透過 */
+/* 全画面編集モード時の広告・外部要素の強制非表示 */
 body.editor-active iframe,
 body.editor-active [id*="admax"],
 body.editor-active [class*="admax"],
-body.editor-active .web-only-container,
-body.editor-active .web-ad-area,
-body.editor-active .admax-wrapper {
+body.editor-active .web-only-container {
     display: none !important;
-    pointer-events: none !important;
-    visibility: hidden !important;
-    opacity: 0 !important;
 }
