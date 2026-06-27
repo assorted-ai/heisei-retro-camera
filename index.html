@@ -25,7 +25,7 @@
     <meta name="apple-mobile-web-app-title" content="平成ﾚﾄﾛｶﾒﾗ">
     <link rel="apple-touch-icon" href="icon-192.png">
 
-    <link rel="stylesheet" href="style.css?v=5">
+    <link rel="stylesheet" href="style.css?v=6">
     <!-- レトロなドットフォントをインポート -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -33,6 +33,14 @@
 </head>
 <body>
     <div class="app-wrapper">
+        <!-- スマホWeb版限定：最上部バナー (320x50) -->
+        <div class="web-only-container ad-mobile-only" style="margin-top: 10px; margin-bottom: 5px; width: 100%; display: flex; justify-content: center; align-items: center;">
+            <div class="admax-wrapper">
+                <!-- admax -->
+                <script src="https://adm.shinobi.jp/s/96e5e6a178e38fd227692c50a9574ebe"></script>
+                <!-- admax -->
+            </div>
+        </div>
         <header class="app-header">
             <h1 class="logo-text">★ ｹｰﾀｲ写ﾒ CLUB ★</h1>
             <p class="sub-text">あの頃の画質に戻れる魔法のカメラアプリ</p>
@@ -344,17 +352,17 @@
         <div class="web-ad-area">
             <div class="web-ad-label">広告</div>
             
-            <!-- スマホ用バナー (320x50) -->
+            <!-- スマホ用バナー (320x100) -->
             <div class="admax-wrapper ad-mobile-only">
                 <!-- admax -->
-                <script src="https://adm.shinobi.jp/s/96e5e6a178e38fd227692c50a9574ebe"></script>
+                <script src="https://adm.shinobi.jp/s/89c26886f02d72fa9f529df8e6dc32fd"></script>
                 <!-- admax -->
             </div>
 
-            <!-- PC用バナー (300x250 消せるオーバーレイ) -->
+            <!-- PC用バナー (728x90) -->
             <div class="admax-wrapper ad-desktop-only">
                 <!-- admax -->
-                <script src="https://adm.shinobi.jp/s/2958991db67e492245e11190454d2484"></script>
+                <script src="https://adm.shinobi.jp/s/ff1e614f58d47c0a94a91d3cadf0cf4e"></script>
                 <!-- admax -->
             </div>
         </div>
@@ -372,7 +380,7 @@
         </div>
     </div>
 
-    <script src="app.js?v=10"></script>
+    <script src="app.js?v=11"></script>
     
     <!-- サービスワーカー (PWA) の登録と自動更新スクリプト -->
     <script>

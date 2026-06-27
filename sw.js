@@ -1,4 +1,4 @@
-const CACHE_NAME = 'heisei-retro-camera-v4';
+const CACHE_NAME = 'heisei-retro-camera-v5';
 const ASSETS = [
   './',
   './index.html',
