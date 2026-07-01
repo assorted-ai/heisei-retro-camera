@@ -1470,6 +1470,12 @@ body.is-capacitor .pwa-toast-container {
     .ad-desktop-only {
         display: none !important;
     }
+    
+    /* タイトルの文字溢れ・改行を防ぐ */
+    .logo-text {
+        font-size: 1.8rem !important;
+        white-space: nowrap;
+    }
 }
 
 /* 全画面編集モード時の広告・外部要素の強制非表示 */
